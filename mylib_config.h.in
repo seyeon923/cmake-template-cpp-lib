@@ -1,0 +1,4 @@
+#define MYLIB_VERSION_MAJOR @mylib_VERSION_MAJOR@
+#define MYLIB_VERSION_MINOR @mylib_VERSION_MINOR@
+
+#cmakedefine EXPORT_C_FUNC
