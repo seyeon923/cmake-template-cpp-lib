@@ -2,12 +2,20 @@ cmake_minimum_required(VERSION 3.16)
 
 project(mylib VERSION 1.0.0)
 
-option(EX_OPT_VAR "Example of Optional Variables" ON)
+# control where the static and shared libraries are built so that on windows
+# we don't need to tinker with the path to run the executable
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}")
+
+option(EX_OPT_VAR "Example of optional variables" ON)
+option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
 
 # print optional variables
 message("")
 message("-- Optional Variables --")
 message("    EX_OPT_VAR = ${EX_OPT_VAR}")
+message("    BUILD_SHARED_LIBS = ${BUILD_SHARED_LIBS}")
 message("------------------------")
 message("")
 
