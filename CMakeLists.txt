@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(mylib VERSION 1.0)
+project(mylib VERSION 1.0.0)
 
 option(EX_OPT_VAR "Example of Optional Variables" ON)
 

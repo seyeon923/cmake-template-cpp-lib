@@ -4,7 +4,7 @@
 
 int main() {
     std::cout << "mylib version: " << MYLIB_VERSION_MAJOR << '.'
-              << MYLIB_VERSION_MINOR << std::endl;
+              << MYLIB_VERSION_MINOR << '.' << MYLIB_VERSION_PATCH << std::endl;
 
 #ifdef EX_OPT_VAR
     std::cout << "\nEX_OPT_VAR defined" << std::endl;
