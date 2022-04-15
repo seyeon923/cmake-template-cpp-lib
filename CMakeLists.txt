@@ -20,10 +20,17 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 add_library(${PROJECT_NAME} 
     "src/mylib.cpp" 
     "src/internal.cpp")
-    
+
 target_include_directories(${PROJECT_NAME} PUBLIC 
     ${PROJECT_BINARY_DIR}
     "${PROJECT_SOURCE_DIR}/include")
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR})
+
+install(TARGETS ${PROJECT_NAME} DESTINATION lib)
+install(FILES 
+    "include/mylib.h" 
+    "include/mylib.hpp" 
+    "${PROJECT_BINARY_DIR}/mylib_config.h"
+    DESTINATION include)
 
 add_subdirectory(tests)
