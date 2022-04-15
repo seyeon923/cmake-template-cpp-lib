@@ -11,4 +11,4 @@ add_test(NAME Runs COMMAND ${TEST_TARGET})
 add_test(NAME Version COMMAND ${TEST_TARGET})
 set_tests_properties(Version
     PROPERTIES PASS_REGULAR_EXPRESSION 
-    "mylib version: ${${PROJECT_NAME}_VERSION}.*")
+    "mylib version: ${PROJECT_VERSION}.*")
