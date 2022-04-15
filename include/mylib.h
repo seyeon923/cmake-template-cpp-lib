@@ -1,7 +1,10 @@
+#ifndef MYLIB_INCLUDE_MYLIB_H_
+#define MYLIB_INCLUDE_MYLIB_H_
+
 #include "mylib_config.h"
 
-#ifdef EXPORT_C_FUNC
 extern "C" {
 int mylib_c_func(const char* str, int repeat);
 }
-#endif
+
+#endif  // MYLIB_INCLUDE_MYLIB_H_

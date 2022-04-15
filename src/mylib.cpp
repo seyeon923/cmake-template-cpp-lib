@@ -1,14 +1,18 @@
-#include "mylib.hpp"
+#include "include/mylib.hpp"
+#include "include/mylib.h"
 
 #include <iostream>
+
+#include "src/internal.h"
 
 using namespace std;
 
 int mylib_c_func(const char* str, int repeat) {
     for (int i = 0; i < repeat; ++i) {
-        std::cout << str << ' ';
+        internal::MyPrint(str);
+        internal::MyPrint(" ");
     }
-    std::cout << endl;
+    internal::MyPrint("\n");
     return 0;
 }
 
