@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 project(mylib VERSION 1.0.0)
+string(TOUPPER ${PROJECT_NAME} PROJECT_NAME_UPPER)
 
 # control where the static and shared libraries are built so that on windows
 # we don't need to tinker with the path to run the executable
@@ -25,15 +26,26 @@ configure_file(mylib_config.h.in mylib_config.h)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-add_library(${PROJECT_NAME} 
-    "src/mylib.cpp" 
-    "src/internal.cpp")
+# Internal Static Library
+add_library(InternalStaticLib STATIC "src/internal.cpp")
+target_include_directories(InternalStaticLib PRIVATE ${PROJECT_SOURCE_DIR})
+set_target_properties(InternalStaticLib PROPERTIES
+    POSITION_INDEPENDENT_CODE ${BUILD_SHARED_LIBS})
 
+# Project Library
+add_library(${PROJECT_NAME} "src/mylib.cpp")
+target_link_libraries(${PROJECT_NAME} PRIVATE InternalStaticLib)
 target_include_directories(${PROJECT_NAME} PUBLIC 
     ${PROJECT_BINARY_DIR}
     "${PROJECT_SOURCE_DIR}/include")
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR})
 
+if(${BUILD_SHARED_LIBS})
+    target_compile_definitions(${PROJECT_NAME} PRIVATE "EXPORT_${PROJECT_NAME_UPPER}")
+    target_compile_definitions(${PROJECT_NAME} INTERFACE "IMPORT_${PROJECT_NAME_UPPER}")
+endif()
+
+# Installed targets and files
 install(TARGETS ${PROJECT_NAME} DESTINATION lib)
 install(FILES 
     "include/mylib.h" 
@@ -43,6 +55,7 @@ install(FILES
 
 add_subdirectory(tests)
 
+# Packaging
 include(InstallRequiredSystemLibraries)
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/License.txt")
 set(CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})

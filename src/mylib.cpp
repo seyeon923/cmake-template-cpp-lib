@@ -1,5 +1,5 @@
-#include "include/mylib.hpp"
-#include "include/mylib.h"
+#include "mylib.h"
+#include "mylib.hpp"
 
 #include <iostream>
 
