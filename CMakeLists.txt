@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 3.16)
 project(mylib VERSION 1.0.0)
 string(TOUPPER ${PROJECT_NAME} PROJECT_NAME_UPPER)
 
+set(CMAKE_DEBUG_POSTFIX d)
+
 # control where the static and shared libraries are built so that on windows
 # we don't need to tinker with the path to run the executable
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}")
@@ -44,7 +46,9 @@ set_target_properties(InternalStaticLib PROPERTIES
 
 # Project Library
 add_library(${PROJECT_NAME} "src/mylib.cpp")
+
 target_link_libraries(${PROJECT_NAME} PRIVATE InternalStaticLib)
+
 target_include_directories(${PROJECT_NAME} PUBLIC 
     "$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>"
     "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>"
@@ -52,6 +56,10 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 target_include_directories(${PROJECT_NAME} PRIVATE 
     ${PROJECT_BINARY_DIR}
     ${PROJECT_SOURCE_DIR})
+
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    VERSION ${PROJECT_VERSION}
+    SOVERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}")
 
 if(${BUILD_SHARED_LIBS})
     target_compile_definitions(${PROJECT_NAME} PRIVATE "EXPORT_${PROJECT_NAME_UPPER}")
