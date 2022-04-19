@@ -29,11 +29,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # compiler warning flags interface library
 add_library(compiler_warning_flags INTERFACE)
-set(GCC_LIKE_CXX "$<COMPILE_LANG_AND_ID:CXX,ARMClang,AppleClang,Clang,GNU,LCC>")
-set(MSVC_CXX "$<COMPILE_LANG_AND_ID:CXX,MSVC>")
+set(gcc_like_cxx "$<COMPILE_LANG_AND_ID:CXX,ARMClang,AppleClang,Clang,GNU,LCC>")
+set(msvc_cxx "$<COMPILE_LANG_AND_ID:CXX,MSVC>")
 target_compile_options(compiler_warning_flags INTERFACE
-    "$<${GCC_LIKE_CXX}:$<BUILD_INTERFACE:-Wall;-Wextra;-Wshadow;-Wformat=2;-Wunused>>"
-    "$<${MSVC_CXX}:$<BUILD_INTERFACE:-W3>>")
+    "$<${gcc_like_cxx}:$<BUILD_INTERFACE:-Wall;-Wextra;-Wshadow;-Wformat=2;-Wunused>>"
+    "$<${msvc_cxx}:$<BUILD_INTERFACE:-W3>>")
 
 # Internal Static Library
 add_library(InternalStaticLib STATIC "src/internal.cpp")
@@ -46,8 +46,9 @@ set_target_properties(InternalStaticLib PROPERTIES
 add_library(${PROJECT_NAME} "src/mylib.cpp")
 target_link_libraries(${PROJECT_NAME} PRIVATE InternalStaticLib)
 target_include_directories(${PROJECT_NAME} PUBLIC 
-    "${PROJECT_BINARY_DIR}/include"
-    "${PROJECT_SOURCE_DIR}/include")
+    "$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>"
+    "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>"
+    "$<INSTALL_INTERFACE:include>")
 target_include_directories(${PROJECT_NAME} PRIVATE 
     ${PROJECT_BINARY_DIR}
     ${PROJECT_SOURCE_DIR})
@@ -57,13 +58,39 @@ if(${BUILD_SHARED_LIBS})
     target_compile_definitions(${PROJECT_NAME} INTERFACE "IMPORT_${PROJECT_NAME_UPPER}")
 endif()
 
-# Installed targets and files
-install(TARGETS ${PROJECT_NAME} DESTINATION lib)
+# Installed targets and files and export
+install(TARGETS ${PROJECT_NAME} 
+    EXPORT "${PROJECT_NAME}Targets"
+    DESTINATION lib)
 install(FILES 
-    "include/mylib.h" 
-    "include/mylib.hpp" 
-    "${PROJECT_BINARY_DIR}/mylib_config.h"
-    DESTINATION include)
+    "include/mylib/mylib.h"
+    "include/mylib/mylib.hpp"
+    "${PROJECT_BINARY_DIR}/include/mylib/mylib_version.h"
+    DESTINATION include/mylib)
+install(EXPORT "${PROJECT_NAME}Targets"
+    FILE "${PROJECT_NAME}Targets.cmake"
+    DESTINATION "lib/cmake/${PROJECT_NAME}")
+
+include(CMakePackageConfigHelpers)
+# generate the config file that is includes the exports
+configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
+    "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+    INSTALL_DESTINATION "lib/cmake/example"
+    NO_SET_AND_CHECK_MACRO
+    NO_CHECK_REQUIRED_COMPONENTS_MACRO
+)
+write_basic_package_version_file(
+    "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
+    VERSION ${PROJECT_VERSION}
+    COMPATIBILITY SameMinorVersion
+)
+install(FILES
+    "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
+    DESTINATION "lib/cmake/${PROJECT_NAME}")
+
+export(EXPORT "${PROJECT_NAME}Targets"
+    FILE "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Targets.cmake")
 
 add_subdirectory(tests)
 
