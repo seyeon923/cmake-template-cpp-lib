@@ -27,8 +27,17 @@ configure_file(mylib_version.h.in "${PROJECT_BINARY_DIR}/include/mylib/mylib_ver
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+# compiler warning flags interface library
+add_library(compiler_warning_flags INTERFACE)
+set(GCC_LIKE_CXX "$<COMPILE_LANG_AND_ID:CXX,ARMClang,AppleClang,Clang,GNU,LCC>")
+set(MSVC_CXX "$<COMPILE_LANG_AND_ID:CXX,MSVC>")
+target_compile_options(compiler_warning_flags INTERFACE
+    "$<${GCC_LIKE_CXX}:$<BUILD_INTERFACE:-Wall;-Wextra;-Wshadow;-Wformat=2;-Wunused>>"
+    "$<${MSVC_CXX}:$<BUILD_INTERFACE:-W3>>")
+
 # Internal Static Library
 add_library(InternalStaticLib STATIC "src/internal.cpp")
+target_link_libraries(InternalStaticLib PUBLIC compiler_warning_flags)
 target_include_directories(InternalStaticLib PRIVATE ${PROJECT_SOURCE_DIR})
 set_target_properties(InternalStaticLib PROPERTIES
     POSITION_INDEPENDENT_CODE ${BUILD_SHARED_LIBS})
