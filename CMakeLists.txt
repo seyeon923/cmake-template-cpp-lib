@@ -21,6 +21,7 @@ message("------------------------")
 message("")
 
 configure_file(mylib_config.h.in mylib_config.h)
+configure_file(mylib_version.h.in "${PROJECT_BINARY_DIR}/include/mylib/mylib_version.h")
 
 # specify the C++ standard
 set(CMAKE_CXX_STANDARD 17)
@@ -36,9 +37,11 @@ set_target_properties(InternalStaticLib PROPERTIES
 add_library(${PROJECT_NAME} "src/mylib.cpp")
 target_link_libraries(${PROJECT_NAME} PRIVATE InternalStaticLib)
 target_include_directories(${PROJECT_NAME} PUBLIC 
-    ${PROJECT_BINARY_DIR}
+    "${PROJECT_BINARY_DIR}/include"
     "${PROJECT_SOURCE_DIR}/include")
-target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR})
+target_include_directories(${PROJECT_NAME} PRIVATE 
+    ${PROJECT_BINARY_DIR}
+    ${PROJECT_SOURCE_DIR})
 
 if(${BUILD_SHARED_LIBS})
     target_compile_definitions(${PROJECT_NAME} PRIVATE "EXPORT_${PROJECT_NAME_UPPER}")

@@ -3,8 +3,7 @@
 
 #include <string>
 
-#include "mylib_config.h"
-#include "mylib.h"
+#include "mylib/mylib.h"
 
 #if defined(_WIN32)
 #    if defined(EXPORT_MYLIB)
@@ -20,6 +19,7 @@
 
 namespace mylib {
 int MYLIB_API CppFunction(const std::string& str, int repeat);
-}
+bool MYLIB_API IsExOptVarDefined();
+}  // namespace mylib
 
 #endif  // MYLIB_INCLUDE_MYLIB_HPP_

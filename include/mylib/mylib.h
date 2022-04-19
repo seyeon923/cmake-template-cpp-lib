@@ -1,8 +1,6 @@
 #ifndef MYLIB_INCLUDE_MYLIB_H_
 #define MYLIB_INCLUDE_MYLIB_H_
 
-#include "mylib_config.h"
-
 #if defined(_WIN32)
 #    if defined(EXPORT_MYLIB)
 #        define MYLIB_API __declspec(dllexport)
