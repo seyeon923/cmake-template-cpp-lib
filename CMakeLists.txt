@@ -67,7 +67,8 @@ if(${BUILD_SHARED_LIBS})
 endif()
 
 # Installed targets and files and export
-install(TARGETS ${PROJECT_NAME} 
+set(installable_targets ${PROJECT_NAME} InternalStaticLib compiler_warning_flags)
+install(TARGETS ${installable_targets}
     EXPORT "${PROJECT_NAME}Targets"
     DESTINATION lib)
 install(FILES 
