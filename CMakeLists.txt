@@ -70,7 +70,9 @@ endif()
 set(installable_targets ${PROJECT_NAME} InternalStaticLib compiler_warning_flags)
 install(TARGETS ${installable_targets}
     EXPORT "${PROJECT_NAME}Targets"
-    DESTINATION lib)
+    RUNTIME DESTINATION bin COMPONENT Runtime
+    LIBRARY DESTINATION lib COMPONENT Runtime
+    ARCHIVE DESTINATION "lib/${PROJECT_NAME}" COMPONENT Development)
 install(FILES 
     "include/mylib/mylib.h"
     "include/mylib/mylib.hpp"
