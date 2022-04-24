@@ -2,6 +2,7 @@
 
 #include "mylib/mylib_version.h"
 #include "mylib/mylib.hpp"
+#include "mylib/mylib.h"
 
 int main() {
     std::cout << "mylib version: " << MYLIB_VERSION_MAJOR << '.'
@@ -18,6 +19,8 @@ int main() {
 
     std::cout << "\nCall mylib::CppFunc(\"Hello\", 2)" << std::endl;
     std::cout << "return: " << mylib::CppFunction("Hello", 2) << std::endl;
+
+    std::cout << "Mylib Build Type: " << mylib::GetBuildType() << std::endl;
 
     return 0;
 }

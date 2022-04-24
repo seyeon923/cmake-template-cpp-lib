@@ -74,6 +74,7 @@ install(TARGETS ${installable_targets}
     LIBRARY DESTINATION lib COMPONENT Runtime
     ARCHIVE DESTINATION "lib/${PROJECT_NAME}" COMPONENT Development)
 install(FILES 
+    "include/mylib/mylib_api.h"
     "include/mylib/mylib.h"
     "include/mylib/mylib.hpp"
     "${PROJECT_BINARY_DIR}/include/mylib/mylib_version.h"
