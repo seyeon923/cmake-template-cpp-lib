@@ -3,7 +3,12 @@ cmake_minimum_required(VERSION 3.16)
 project(mylib VERSION 1.0.0)
 string(TOUPPER ${PROJECT_NAME} PROJECT_NAME_UPPER)
 
+set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_DEBUG_POSTFIX d)
+
+# specify the C++ standard
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # control where the static and shared libraries are built so that on windows
 # we don't need to tinker with the path to run the executable
@@ -24,10 +29,6 @@ message("")
 
 configure_file(mylib_config.h.in mylib_config.h)
 configure_file(mylib_version.h.in "${PROJECT_BINARY_DIR}/include/mylib/mylib_version.h")
-
-# specify the C++ standard
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # compiler warning flags interface library
 add_library(compiler_warning_flags INTERFACE)
