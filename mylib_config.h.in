@@ -3,6 +3,4 @@
 
 #cmakedefine EX_OPT_VAR
 
-#define BUILD_TYPE "@CMAKE_BUILD_TYPE@"
-
 #endif // MYLIB_MYLIB_CONFIG_H_

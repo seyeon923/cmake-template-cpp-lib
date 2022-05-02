@@ -20,7 +20,5 @@ int main() {
     std::cout << "\nCall mylib::CppFunc(\"Hello\", 2)" << std::endl;
     std::cout << "return: " << mylib::CppFunction("Hello", 2) << std::endl;
 
-    std::cout << "Mylib Build Type: " << mylib::GetBuildType() << std::endl;
-
     return 0;
 }

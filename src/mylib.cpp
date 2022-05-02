@@ -28,5 +28,3 @@ bool mylib::IsExOptVarDefined() {
     return false;
 #endif
 }
-
-string mylib::GetBuildType() { return BUILD_TYPE; }
