@@ -6,9 +6,9 @@
 #include "mylib/mylib_api.h"
 
 namespace mylib {
-int MYLIB_API CppFunction(const std::string& str, int repeat);
-bool MYLIB_API IsExOptVarDefined();
-std::string MYLIB_API GetBuildType();
+MYLIB_API int CppFunction(const std::string& str, int repeat);
+MYLIB_API bool IsExOptVarDefined();
+MYLIB_API std::string GetBuildType();
 }  // namespace mylib
 
 #endif  // MYLIB_INCLUDE_MYLIB_MYLIB_HPP_

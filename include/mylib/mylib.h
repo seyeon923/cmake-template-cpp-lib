@@ -4,7 +4,7 @@
 #include "mylib/mylib_api.h"
 
 extern "C" {
-int MYLIB_API mylib_c_func(const char* str, int repeat);
+MYLIB_API int mylib_c_func(const char* str, int repeat);
 }
 
 #endif  // MYLIB_INCLUDE_MYLIB_MYLIB_H_
