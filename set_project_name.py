@@ -68,3 +68,18 @@ replace_file_content('tests/CMakeLists.txt', [('mylib', project_name)])
 replace_file_content('tests/test_mylib.cpp',
                      [('MYLIB', project_name_upper), ('mylib', project_name)])
 os.rename('tests/test_mylib.cpp', f'tests/test_{project_name}.cpp')
+
+# modify clr_wrapper/AssemblyInfo.cpp.in
+replace_file_content('clr_wrapper/AssemblyInfo.cpp.in',
+                     [('mylib', project_name)])
+
+# modify clr_wrapper/CMakeLists.txt
+replace_file_content('clr_wrapper/CMakeLists.txt', [('mylib', project_name)])
+
+# modify clr_wrapper/mylib.clr.cpp
+replace_file_content('clr_wrapper/mylib.clr.cpp', [('mylib', project_name)])
+os.rename('clr_wrapper/mylib.clr.cpp', f'clr_wrapper/{project_name}.clr.cpp')
+
+# modify clr_wrapper/mylib.clr.h
+replace_file_content('clr_wrapper/mylib.clr.h', [('mylib', project_name)])
+os.rename('clr_wrapper/mylib.clr.h', f'clr_wrapper/{project_name}.clr.h')

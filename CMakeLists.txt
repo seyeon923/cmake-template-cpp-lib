@@ -18,6 +18,11 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}")
 
 option(EX_OPT_VAR "Example of optional variables" ON)
 option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
+if(WIN32)
+    option(INCLUDE_CLR "Include CLR Wrapper Library" ON)
+else()
+    option(INCLUDE_CLR "Include CLR Wrapper Library" OFF)
+endif()
 
 # print optional variables
 message("")
@@ -106,6 +111,10 @@ export(EXPORT "${PROJECT_NAME}Targets"
     FILE "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Targets.cmake")
 
 add_subdirectory(tests)
+
+if(WIN32 AND ${INCLUDE_CLR})
+    add_subdirectory(clr_wrapper)
+endif()
 
 # Packaging
 include(InstallRequiredSystemLibraries)
