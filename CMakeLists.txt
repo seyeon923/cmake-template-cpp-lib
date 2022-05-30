@@ -84,10 +84,12 @@ install(FILES
     "include/mylib/mylib.h"
     "include/mylib/mylib.hpp"
     "${PROJECT_BINARY_DIR}/include/mylib/mylib_version.h"
-    DESTINATION include/mylib)
+    DESTINATION include/mylib
+    COMPONENT Development)
 install(EXPORT "${PROJECT_NAME}Targets"
     FILE "${PROJECT_NAME}Targets.cmake"
-    DESTINATION "lib/cmake/${PROJECT_NAME}")
+    DESTINATION "lib/cmake/${PROJECT_NAME}"
+    COMPONENT Development)
 
 include(CMakePackageConfigHelpers)
 # generate the config file that is includes the exports
@@ -105,7 +107,8 @@ write_basic_package_version_file(
 install(FILES
     "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
     "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
-    DESTINATION "lib/cmake/${PROJECT_NAME}")
+    DESTINATION "lib/cmake/${PROJECT_NAME}"
+    COMPONENT Development)
 
 export(EXPORT "${PROJECT_NAME}Targets"
     FILE "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Targets.cmake")
