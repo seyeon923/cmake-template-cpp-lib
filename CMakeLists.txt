@@ -116,7 +116,7 @@ export(EXPORT "${PROJECT_NAME}Targets"
 add_subdirectory(tests)
 
 if(WIN32 AND ${INCLUDE_CLR})
-    add_subdirectory(clr_wrapper)
+    add_subdirectory(mylib.CLR)
 endif()
 
 # Packaging
