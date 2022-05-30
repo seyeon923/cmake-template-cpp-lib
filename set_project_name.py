@@ -69,6 +69,19 @@ replace_file_content('tests/test_mylib.cpp',
                      [('MYLIB', project_name_upper), ('mylib', project_name)])
 os.rename('tests/test_mylib.cpp', f'tests/test_{project_name}.cpp')
 
+# modify mylib.CLR/Test-mylib.CLR/Program.cs
+replace_file_content('mylib.CLR/Test-mylib.CLR/Program.cs',
+                     [('mylib', project_name)])
+
+# modify mylib.CLR/Test-mylib.CLR/Test-mylib.CLR.csproj
+replace_file_content(
+    'mylib.CLR/Test-mylib.CLR/Test-mylib.CLR.csproj', [('mylib', project_name)])
+os.rename('mylib.CLR/Test-mylib.CLR/Test-mylib.CLR.csproj',
+          f'mylib.CLR/Test-mylib.CLR/Test-{project_name}.CLR.csproj')
+
+# rename mylib.CLR/Test-mylib.CLR
+os.rename('mylib.CLR/Test-mylib.CLR', f'mylib.CLR/Test-{project_name}.CLR')
+
 # modify mylib.CLR/AssemblyInfo.cpp.in
 replace_file_content('mylib.CLR/AssemblyInfo.cpp.in',
                      [('mylib', project_name)])

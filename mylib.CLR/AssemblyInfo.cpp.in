@@ -13,6 +13,6 @@ using namespace System::Security::Permissions;
 [assembly:AssemblyTrademarkAttribute(L"")];
 [assembly:AssemblyCultureAttribute(L"")];
 
-[assembly:AssemblyVersionAttribute(L"@mylib.CLR_VERSION_MAJOR@.@mylib.CLR_VERSION_MINOR@.@mylib.CLR_VERSION_PATCH@")];
+[assembly:AssemblyVersionAttribute(L"@mylib.CLR_VERSION_MAJOR@.@mylib.CLR_VERSION_MINOR@.@mylib.CLR_VERSION_PATCH@.*")];
 
 [assembly:ComVisible(false)];

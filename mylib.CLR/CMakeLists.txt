@@ -20,9 +20,11 @@ target_link_libraries(${PROJECT_NAME} PRIVATE ${CMAKE_PROJECT_NAME} compiler_war
 set(configuration "$<IF:$<CONFIG:Debug>,Debug,Release>")
 set(out_dir "${CMAKE_BINARY_DIR}/${configuration}")
 macro(copy_clr_reference_dll dest_dir)
-    set(clr_reference "${dest_dir}/${configuration}/${PROJECT_NAME}.dll")
+    set(clr_dll_name "${PROJECT_NAME}$<$<CONFIG:Debug>:${CMAKE_DEBUG_POSTFIX}>.dll")
+    set(clr_reference "${dest_dir}/${clr_dll_name}")
     add_custom_command(OUTPUT ${clr_reference}
-        COMMAND cmake -e copy ${out_dir}/${PROJECT_NAME}.dll ${clr_reference}
-        DEPENDS ${PROJECT_NAME}
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+        COMMAND cmake -E copy ${out_dir}/${clr_dll_name} ${clr_reference}
+        DEPENDS ${PROJECT_NAME})
 endmacro()
+
+add_subdirectory(Test-mylib.CLR)
