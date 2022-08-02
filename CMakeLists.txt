@@ -37,7 +37,7 @@ set(msvc_cxx "$<COMPILE_LANG_AND_ID:CXX,MSVC>")
 # compiler warning flags interface library
 add_compile_options(
     "$<${gcc_like_cxx}:$<BUILD_INTERFACE:-Wall;-Wextra;-Wshadow;-Wformat=2;-Wunused>>"
-    "$<${msvc_cxx}:$<BUILD_INTERFACE:-W3>>")
+    "$<${msvc_cxx}:$<BUILD_INTERFACE:/W4>>")
 
 # MSVC /permissive- compile options interface library
 add_compile_options(
