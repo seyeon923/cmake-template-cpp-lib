@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 3.16)
 project(mylib VERSION 1.0.0)
 string(TOUPPER ${PROJECT_NAME} PROJECT_NAME_UPPER)
 
+set(CMAKE_VERBOSE_MAKEFILE ON)
+
 set(CMAKE_DEBUG_POSTFIX d)
 
 # control where the static and shared libraries are built so that on windows
@@ -29,17 +31,20 @@ configure_file(mylib_version.h.in "${PROJECT_BINARY_DIR}/include/mylib/mylib_ver
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-# compiler warning flags interface library
-add_library(compiler_warning_flags INTERFACE)
 set(gcc_like_cxx "$<COMPILE_LANG_AND_ID:CXX,ARMClang,AppleClang,Clang,GNU,LCC>")
 set(msvc_cxx "$<COMPILE_LANG_AND_ID:CXX,MSVC>")
-target_compile_options(compiler_warning_flags INTERFACE
+
+# compiler warning flags interface library
+add_compile_options(
     "$<${gcc_like_cxx}:$<BUILD_INTERFACE:-Wall;-Wextra;-Wshadow;-Wformat=2;-Wunused>>"
     "$<${msvc_cxx}:$<BUILD_INTERFACE:-W3>>")
 
+# MSVC /permissive- compile options interface library
+add_compile_options(
+    "$<${msvc_cxx}:$<BUILD_INTERFACE:/permissive->>")
+
 # Internal Static Library
 add_library(InternalStaticLib STATIC "src/internal.cpp")
-target_link_libraries(InternalStaticLib PUBLIC compiler_warning_flags)
 target_include_directories(InternalStaticLib PRIVATE ${PROJECT_SOURCE_DIR})
 set_target_properties(InternalStaticLib PROPERTIES
     POSITION_INDEPENDENT_CODE ${BUILD_SHARED_LIBS})
@@ -49,11 +54,11 @@ add_library(${PROJECT_NAME} "src/mylib.cpp")
 
 target_link_libraries(${PROJECT_NAME} PRIVATE InternalStaticLib)
 
-target_include_directories(${PROJECT_NAME} PUBLIC 
+target_include_directories(${PROJECT_NAME} PUBLIC
     "$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>"
     "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>"
     "$<INSTALL_INTERFACE:include>")
-target_include_directories(${PROJECT_NAME} PRIVATE 
+target_include_directories(${PROJECT_NAME} PRIVATE
     ${PROJECT_BINARY_DIR}
     ${PROJECT_SOURCE_DIR})
 
@@ -67,13 +72,13 @@ if(${BUILD_SHARED_LIBS})
 endif()
 
 # Installed targets and files and export
-set(installable_targets ${PROJECT_NAME} InternalStaticLib compiler_warning_flags)
+set(installable_targets ${PROJECT_NAME} InternalStaticLib)
 install(TARGETS ${installable_targets}
     EXPORT "${PROJECT_NAME}Targets"
     RUNTIME DESTINATION bin COMPONENT Runtime
     LIBRARY DESTINATION lib COMPONENT Runtime
     ARCHIVE DESTINATION "lib/${PROJECT_NAME}" COMPONENT Development)
-install(FILES 
+install(FILES
     "include/mylib/mylib.h"
     "include/mylib/mylib.hpp"
     "${PROJECT_BINARY_DIR}/include/mylib/mylib_version.h"
@@ -83,6 +88,7 @@ install(EXPORT "${PROJECT_NAME}Targets"
     DESTINATION "lib/cmake/${PROJECT_NAME}")
 
 include(CMakePackageConfigHelpers)
+
 # generate the config file that is includes the exports
 configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
     "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
