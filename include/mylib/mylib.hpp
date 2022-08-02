@@ -1,25 +1,20 @@
-#ifndef MYLIB_INCLUDE_MYLIB_HPP_
-#define MYLIB_INCLUDE_MYLIB_HPP_
+#ifndef MYLIB_INCLUDE_MYLIB_MYLIB_HPP_
+#define MYLIB_INCLUDE_MYLIB_MYLIB_HPP_
 
 #include <string>
+#include <iostream>
 
-#include "mylib/mylib.h"
-
-#if defined(_WIN32)
-#    if defined(EXPORT_MYLIB)
-#        define MYLIB_API __declspec(dllexport)
-#    elif defined(IMPORT_MYLIB)
-#        define MYLIB_API __declspec(dllimport)
-#    else
-#        define MYLIB_API
-#    endif
-#else  // non windows
-#    define MYLIB_API
-#endif
+#include "mylib/mylib_api.h"
 
 namespace mylib {
-int MYLIB_API CppFunction(const std::string& str, int repeat);
-bool MYLIB_API IsExOptVarDefined();
+MYLIB_API int CppFunction(const std::string& str, int repeat);
+MYLIB_API bool IsExOptVarDefined();
+
+class Useless {
+public:
+    Useless() { std::cout << "Useless()" << std::endl; }
+    ~Useless() { std::cout << "~Useless()" << std::endl; }
+};
 }  // namespace mylib
 
-#endif  // MYLIB_INCLUDE_MYLIB_HPP_
+#endif  // MYLIB_INCLUDE_MYLIB_MYLIB_HPP_

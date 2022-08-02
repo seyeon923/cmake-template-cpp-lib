@@ -1,20 +1,10 @@
-#ifndef MYLIB_INCLUDE_MYLIB_H_
-#define MYLIB_INCLUDE_MYLIB_H_
+#ifndef MYLIB_INCLUDE_MYLIB_MYLIB_H_
+#define MYLIB_INCLUDE_MYLIB_MYLIB_H_
 
-#if defined(_WIN32)
-#    if defined(EXPORT_MYLIB)
-#        define MYLIB_API __declspec(dllexport)
-#    elif defined(IMPORT_MYLIB)
-#        define MYLIB_API __declspec(dllimport)
-#    else
-#        define MYLIB_API
-#    endif
-#else  // non windows
-#    define MYLIB_API
-#endif
+#include "mylib/mylib_api.h"
 
 extern "C" {
-int MYLIB_API mylib_c_func(const char* str, int repeat);
+MYLIB_API int mylib_c_func(const char* str, int repeat);
 }
 
-#endif  // MYLIB_INCLUDE_MYLIB_H_
+#endif  // MYLIB_INCLUDE_MYLIB_MYLIB_H_

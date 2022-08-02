@@ -2,6 +2,7 @@
 
 #include "mylib/mylib_version.h"
 #include "mylib/mylib.hpp"
+#include "mylib/mylib.h"
 
 int main() {
     std::cout << "mylib version: " << MYLIB_VERSION_MAJOR << '.'

@@ -1,11 +1,14 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.19)
 
 project(mylib VERSION 1.0.0)
 string(TOUPPER ${PROJECT_NAME} PROJECT_NAME_UPPER)
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
-
 set(CMAKE_DEBUG_POSTFIX d)
+
+# specify the C++ standard
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # control where the static and shared libraries are built so that on windows
 # we don't need to tinker with the path to run the executable
@@ -15,6 +18,12 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}")
 
 option(EX_OPT_VAR "Example of optional variables" ON)
 option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
+
+if(WIN32)
+    option(INCLUDE_CLR "Include CLR Wrapper Library" ON)
+else()
+    option(INCLUDE_CLR "Include CLR Wrapper Library" OFF)
+endif()
 
 # print optional variables
 message("")
@@ -27,19 +36,15 @@ message("")
 configure_file(mylib_config.h.in mylib_config.h)
 configure_file(mylib_version.h.in "${PROJECT_BINARY_DIR}/include/mylib/mylib_version.h")
 
-# specify the C++ standard
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
-
 set(gcc_like_cxx "$<COMPILE_LANG_AND_ID:CXX,ARMClang,AppleClang,Clang,GNU,LCC>")
 set(msvc_cxx "$<COMPILE_LANG_AND_ID:CXX,MSVC>")
 
-# compiler warning flags interface library
+# compiler warning options
 add_compile_options(
     "$<${gcc_like_cxx}:$<BUILD_INTERFACE:-Wall;-Wextra;-Wshadow;-Wformat=2;-Wunused>>"
     "$<${msvc_cxx}:$<BUILD_INTERFACE:/W4>>")
 
-# MSVC /permissive- compile options interface library
+# MSVC /permissive- compile option
 add_compile_options(
     "$<${msvc_cxx}:$<BUILD_INTERFACE:/permissive->>")
 
@@ -79,13 +84,16 @@ install(TARGETS ${installable_targets}
     LIBRARY DESTINATION lib COMPONENT Runtime
     ARCHIVE DESTINATION "lib/${PROJECT_NAME}" COMPONENT Development)
 install(FILES
+    "include/mylib/mylib_api.h"
     "include/mylib/mylib.h"
     "include/mylib/mylib.hpp"
     "${PROJECT_BINARY_DIR}/include/mylib/mylib_version.h"
-    DESTINATION include/mylib)
+    DESTINATION include/mylib
+    COMPONENT Development)
 install(EXPORT "${PROJECT_NAME}Targets"
     FILE "${PROJECT_NAME}Targets.cmake"
-    DESTINATION "lib/cmake/${PROJECT_NAME}")
+    DESTINATION "lib/cmake/${PROJECT_NAME}"
+    COMPONENT Development)
 
 include(CMakePackageConfigHelpers)
 
@@ -104,12 +112,19 @@ write_basic_package_version_file(
 install(FILES
     "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
     "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
-    DESTINATION "lib/cmake/${PROJECT_NAME}")
+    DESTINATION "lib/cmake/${PROJECT_NAME}"
+    COMPONENT Development)
 
 export(EXPORT "${PROJECT_NAME}Targets"
     FILE "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Targets.cmake")
 
+enable_testing()
+
 add_subdirectory(tests)
+
+if(WIN32 AND ${INCLUDE_CLR})
+    add_subdirectory(mylib.CLR)
+endif()
 
 # Packaging
 include(InstallRequiredSystemLibraries)

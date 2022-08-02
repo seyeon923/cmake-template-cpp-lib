@@ -6,8 +6,6 @@ set_target_properties(${TEST_TARGET} PROPERTIES DEBUG_POSTFIX ${CMAKE_DEBUG_POST
 
 target_link_libraries(${TEST_TARGET} PUBLIC ${PROJECT_NAME})
 
-enable_testing()
-
 add_test(NAME Runs COMMAND ${TEST_TARGET})
 
 add_test(NAME Version COMMAND ${TEST_TARGET})
