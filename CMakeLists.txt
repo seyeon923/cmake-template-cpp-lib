@@ -48,6 +48,11 @@ add_compile_options(
 add_compile_options(
     "$<${msvc_cxx}:$<BUILD_INTERFACE:/permissive->>")
 
+# MSVC utf-8 option
+add_compile_options(
+    "$<${msvc_cxx}:$<BUILD_INTERFACE:/utf-8>>"
+)
+
 # Internal Static Library
 add_library(InternalStaticLib STATIC "src/internal.cpp")
 target_include_directories(InternalStaticLib PRIVATE ${PROJECT_SOURCE_DIR})
