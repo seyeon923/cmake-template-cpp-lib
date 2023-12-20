@@ -38,6 +38,7 @@ configure_file(mylib_version.h.in "${PROJECT_BINARY_DIR}/include/mylib/mylib_ver
 
 set(gcc_like_cxx "$<COMPILE_LANG_AND_ID:CXX,ARMClang,AppleClang,Clang,GNU,LCC>")
 set(msvc_cxx "$<COMPILE_LANG_AND_ID:CXX,MSVC>")
+set(msvc_c "$<COMPILE_LANG_AND_ID:C,MSVC>")
 
 # compiler warning options
 add_compile_options(
@@ -51,6 +52,7 @@ add_compile_options(
 # MSVC utf-8 option
 add_compile_options(
     "$<${msvc_cxx}:$<BUILD_INTERFACE:/utf-8>>"
+    "$<${msvc_c}:$<BUILD_INTERFACE:/utf-8>>"
 )
 
 # Internal Static Library
